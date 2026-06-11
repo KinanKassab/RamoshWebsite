@@ -1,4 +1,4 @@
-import { redis, tg, deviceLabel, now } from './utils';
+import { redis, tg, deviceLabel, now } from './utils.js';
 
 const MAX = 5;
 

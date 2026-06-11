@@ -1,4 +1,4 @@
-import { redis } from './utils';
+import { redis } from './utils.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(_req: any, res: any) {
