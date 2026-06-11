@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Notebook, SectionTab } from './components/Notebook';
 import { LockScreen } from './components/LockScreen';
@@ -12,6 +12,7 @@ import { NoEndingPage } from './pages/NoEndingPage';
 import { memories } from './data/memories';
 import { useKeyboard } from './hooks/useKeyboard';
 import { useGestures } from './hooks/useGestures';
+import { track } from './utils/track';
 
 type PageId =
   | 'cover'
@@ -82,6 +83,9 @@ export default function App() {
   const [direction, setDirection] = useState(1);
   const [answer, setAnswer] = useState<'yes' | 'no' | null>(null);
 
+  const pageEnterTime = useRef(Date.now());
+  const prevPage = useRef<string | null>(null);
+
   const pages: PageId[] = answer
     ? ([...BASE_PAGES, `${answer}-ending`] as PageId[])
     : BASE_PAGES;
@@ -92,6 +96,16 @@ export default function App() {
   const canGoNext = !isEndingPage && !isQuestionPage && pageIndex < pages.length - 1;
   const canGoPrev = pageIndex > 0 && !isEndingPage;
 
+  /* Track time spent on each page */
+  useEffect(() => {
+    if (prevPage.current !== null) {
+      const secs = Math.round((Date.now() - pageEnterTime.current) / 1000);
+      track({ type: 'page_time', page: prevPage.current, seconds: secs });
+    }
+    prevPage.current = currentPage;
+    pageEnterTime.current = Date.now();
+  }, [currentPage]);
+
   /* Preload upcoming images */
   useEffect(() => {
     if (currentPage === 'cover')     preloadImages(['/images/FXI-1.webp', '/images/FXI-2.webp']);
@@ -100,14 +114,16 @@ export default function App() {
     if (currentPage === 'memory-5')  preloadImages(['/images/Royal-3.webp', '/images/Car-1.webp']);
   }, [currentPage]);
 
-  const goNext = () => {
+  const goNext = (method: 'button' | 'swipe' | 'key' = 'button') => {
     if (!canGoNext) return;
+    track({ type: 'navigate', dir: 'next', from: currentPage, to: pages[pageIndex + 1], method });
     setDirection(1);
     setPageIndex((p) => p + 1);
   };
 
-  const goPrev = () => {
+  const goPrev = (method: 'button' | 'swipe' | 'key' = 'button') => {
     if (!canGoPrev) return;
+    track({ type: 'navigate', dir: 'prev', from: currentPage, to: pages[pageIndex - 1], method });
     setDirection(-1);
     setPageIndex((p) => p - 1);
   };
@@ -125,16 +141,15 @@ export default function App() {
 
   /* Only horizontal swipe — no vertical auto-advance */
   useGestures({
-    onSwipeLeft: goNext,
-    onSwipeRight: goPrev,
+    onSwipeLeft:  () => goNext('swipe'),
+    onSwipeRight: () => goPrev('swipe'),
     threshold: 55,
   });
 
-  /* Only ← → keys — no up/down */
   useKeyboard({
-    onArrowRight: goNext,
-    onArrowLeft: goPrev,
-    onSpace: goNext,
+    onArrowRight: () => goNext('key'),
+    onArrowLeft:  () => goPrev('key'),
+    onSpace:      () => goNext('key'),
   });
 
   const renderPage = () => {

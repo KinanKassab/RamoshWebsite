@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Unlock } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { track } from '../utils/track';
 
 const serif = "'Georgia', 'Times New Roman', serif";
 const RING_COUNT = 7;
@@ -32,6 +33,7 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
 
   /* Check global state on mount */
   useEffect(() => {
+    track({ type: 'visit' });
     fetch('/api/state')
       .then(r => r.json())
       .then((s: { locked: boolean; opened: boolean; attemptsLeft: number }) => {
@@ -324,7 +326,7 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
                     >
                       {attemptsLeft <= 2
                         ? `رمز خاطئ — ${attemptsLeft} محاول${attemptsLeft === 1 ? 'ة' : 'ات'} متبقي${attemptsLeft === 1 ? 'ة' : ''}`
-                        : 'Incorrect code'}
+                        : 'آخر يوم إلنا سوا'}
                     </motion.p>
                   )}
                   {status === 'success' && (
