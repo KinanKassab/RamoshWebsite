@@ -1,9 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Unlock } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { track } from '../utils/track';
-
 const serif = "'Georgia', 'Times New Roman', serif";
+const hand  = "'Caveat', 'Georgia', serif";
 const RING_COUNT = 7;
 const KEYS: (string | null)[] = [
   '1', '2', '3',
@@ -36,8 +35,6 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
     fetch('/api/state')
       .then(r => r.json())
       .then((s: { locked: boolean; opened: boolean; attemptsLeft: number }) => {
-        const siteStatus = s.opened ? 'opened' : s.locked ? 'locked' : 'available';
-        track({ type: 'visit', siteStatus, attemptsLeft: s.attemptsLeft });
         if (s.locked || s.opened) {
           setStatus('locked');
         } else {
@@ -46,7 +43,6 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
         }
       })
       .catch(() => {
-        track({ type: 'visit', siteStatus: 'unknown' });
         setStatus('idle');
       });
   }, []);
@@ -212,7 +208,15 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
             {/* Top ornament */}
             <div className="relative z-10 flex flex-col items-center gap-1.5 w-full">
               <GoldLine locked={isLocked} />
-              <p className="text-amber-700/50 text-xs tracking-[0.42em] uppercase" style={{ fontFamily: serif }}>
+              <p
+                style={{
+                  fontFamily: hand,
+                  fontSize: '13px',
+                  letterSpacing: '0.32em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(175,120,40,0.48)',
+                }}
+              >
                 {isLocked ? 'locked' : 'Private'}
               </p>
             </div>
@@ -275,10 +279,11 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
 
               {/* Title */}
               <p
-                className="text-sm font-light tracking-[0.1em]"
+                className="text-sm font-light tracking-[0.06em]"
                 style={{
-                  fontFamily: serif,
-                  color: isLocked ? 'rgba(140,60,60,0.55)' : 'rgba(255,220,180,0.50)',
+                  fontFamily: isLocked ? serif : hand,
+                  fontSize: isLocked ? '13px' : '16px',
+                  color: isLocked ? 'rgba(140,60,60,0.55)' : 'rgba(255,220,180,0.52)',
                   transition: 'color 0.5s',
                 }}
               >

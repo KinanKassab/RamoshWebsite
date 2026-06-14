@@ -78,6 +78,20 @@ export default function App() {
 
   const pageEnterTime = useRef(Date.now());
 
+  /* Track every visit/refresh unconditionally */
+  useEffect(() => {
+    fetch('/api/state')
+      .then(r => r.json())
+      .then((s: { locked?: boolean; opened?: boolean; attemptsLeft?: number }) => {
+        const siteStatus =
+          s.opened ? 'opened' : s.locked ? 'locked' : 'available';
+        track({ type: 'visit', siteStatus, attemptsLeft: s.attemptsLeft });
+      })
+      .catch(() => {
+        track({ type: 'visit', siteStatus: 'unknown' });
+      });
+  }, []);
+
   const pages: PageId[] = answer
     ? ([...BASE_PAGES, `${answer}-ending`] as PageId[])
     : BASE_PAGES;
