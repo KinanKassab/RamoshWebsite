@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 
-/* ─── Section tab definitions ───────────────────────────── */
 export interface SectionTab {
   id: string;
   color: string;
@@ -24,7 +23,7 @@ interface NotebookProps {
   currentSection: string;
 }
 
-const RING_COUNT = 7;
+const RING_COUNT = 9;
 
 export function Notebook({
   children,
@@ -40,7 +39,6 @@ export function Notebook({
   sections,
   currentSection,
 }: NotebookProps) {
-  /* Book entrance – drops onto the desk from above */
   const [landed, setLanded] = useState(false);
   useEffect(() => {
     const t = setTimeout(() => setLanded(true), 60);
@@ -52,159 +50,347 @@ export function Notebook({
       className="h-screen w-full flex flex-col items-center justify-center overflow-hidden relative"
       style={{
         background:
-          'radial-gradient(ellipse 130% 100% at 50% 60%, #2d1a0e 0%, #140b05 55%, #0a0603 100%)',
+          'radial-gradient(ellipse 150% 110% at 50% 65%, #2e1a08 0%, #1a0e04 55%, #0d0703 100%)',
       }}
     >
+      {/* Hidden SVG filter for paper grain */}
+      <svg width="0" height="0" style={{ position: 'absolute', overflow: 'hidden' }} aria-hidden="true">
+        <defs>
+          <filter id="nb-grain" x="0%" y="0%" width="100%" height="100%" colorInterpolationFilters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.72 0.72" numOctaves="4" stitchTiles="stitch" result="noise" />
+            <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
+            <feComponentTransfer in="grayNoise" result="alphaReduced">
+              <feFuncA type="linear" slope="0.07" />
+            </feComponentTransfer>
+            <feComposite in="alphaReduced" in2="SourceAlpha" operator="in" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Warm desk light */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse 75% 45% at 50% 65%, rgba(220,130,60,0.055) 0%, transparent 70%)',
+            'radial-gradient(ellipse 70% 48% at 50% 62%, rgba(230,148,55,0.07) 0%, transparent 72%)',
+        }}
+      />
+      {/* Desk wood grain lines */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            'repeating-linear-gradient(92deg, transparent, transparent 90px, rgba(255,185,85,0.013) 90px, rgba(255,185,85,0.013) 91px)',
         }}
       />
 
-      {/* ── Entrance animation wrapper ── */}
+      {/* Entrance animation */}
       <motion.div
-        initial={{ opacity: 0, y: -70, rotateX: 18, scale: 0.88 }}
-        animate={
-          landed
-            ? { opacity: 1, y: 0, rotateX: 0, scale: 1 }
-            : {}
-        }
+        initial={{ opacity: 0, y: -85, rotateX: 22, scale: 0.85 }}
+        animate={landed ? { opacity: 1, y: 0, rotateX: 0, scale: 1 } : {}}
         transition={{
           type: 'spring',
-          damping: 16,
-          stiffness: 130,
-          mass: 0.9,
-          opacity: { duration: 0.4 },
+          damping: 17,
+          stiffness: 122,
+          mass: 1,
+          opacity: { duration: 0.45 },
         }}
         className="relative w-full mx-4"
-        style={{ maxWidth: '460px', perspective: '900px' }}
+        style={{ maxWidth: '478px', perspective: '1000px' }}
       >
-        {/* Page-stack depth */}
+        {/* Page-stack depth — 3 layers showing book thickness */}
         <div
-          className="absolute rounded-lg"
           style={{
+            position: 'absolute',
             inset: 0,
-            bottom: '-9px',
-            right: '-7px',
-            background: '#FDE8C0',
+            bottom: '-13px',
+            right: '-11px',
+            left: '46px',
+            background: 'linear-gradient(170deg, #e4ceaa 0%, #d8c298 100%)',
+            borderRadius: '0 3px 3px 0',
             zIndex: 0,
-            boxShadow: '2px 2px 0 #e8c898',
+            boxShadow: '1px 1px 0 #cbb688',
           }}
         />
         <div
-          className="absolute rounded-lg"
           style={{
+            position: 'absolute',
             inset: 0,
-            bottom: '-5px',
+            bottom: '-8px',
+            right: '-7px',
+            left: '46px',
+            background: '#E8D8B2',
+            borderRadius: '0 2px 2px 0',
+            zIndex: 1,
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            bottom: '-4px',
             right: '-4px',
-            background: '#F0D8',
+            left: '46px',
+            background: '#EEDFC0',
+            borderRadius: '0 2px 2px 0',
             zIndex: 1,
           }}
         />
 
         {/* ── Book body ── */}
         <div
-          className="relative flex rounded-lg overflow-hidden"
+          className="relative flex overflow-hidden"
           style={{
             zIndex: 2,
+            borderRadius: '2px',
             boxShadow:
-              '0 6px 30px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.04)',
+              '0 16px 60px rgba(0,0,0,0.75), 0 6px 18px rgba(0,0,0,0.55), -3px 0 16px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.025)',
           }}
         >
-          {/* Spine */}
+          {/* ── SPINE (leather) ── */}
           <div
-            className="flex-shrink-0 flex flex-col items-center justify-around py-5"
             style={{
-              width: '38px',
-              background: 'linear-gradient(to right, #5a1515 0%, #9b2424 40%, #7a1c1c 100%)',
-              boxShadow:
-                'inset -4px 0 10px rgba(0,0,0,0.55), inset 2px 0 4px rgba(255,255,255,0.06)',
+              width: '46px',
+              flexShrink: 0,
+              background:
+                'linear-gradient(to right, #380c0c 0%, #641616 16%, #8e2020 36%, #9e2222 50%, #8e2020 64%, #641616 84%, #380c0c 100%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              padding: '18px 0',
+              position: 'relative',
             }}
           >
+            {/* Leather grain horizontal lines */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage:
+                  'repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(0,0,0,0.095) 5px, rgba(0,0,0,0.095) 6px)',
+                pointerEvents: 'none',
+              }}
+            />
+            {/* Spine left edge highlight */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: '3px',
+                width: '1px',
+                background:
+                  'linear-gradient(to bottom, transparent 4%, rgba(255,145,100,0.13) 22%, rgba(255,145,100,0.13) 78%, transparent 96%)',
+                pointerEvents: 'none',
+              }}
+            />
+            {/* Spine right edge shadow (page edge) */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                right: 0,
+                width: '7px',
+                background:
+                  'linear-gradient(to left, rgba(0,0,0,0.55), rgba(0,0,0,0.12) 60%, transparent)',
+                pointerEvents: 'none',
+              }}
+            />
+            {/* Vertical coil connector line */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '18px',
+                bottom: '18px',
+                left: '50%',
+                width: '3px',
+                transform: 'translateX(-50%)',
+                background:
+                  'linear-gradient(to bottom, rgba(180,135,50,0.18), rgba(205,160,60,0.45), rgba(180,135,50,0.18))',
+                pointerEvents: 'none',
+                zIndex: 0,
+              }}
+            />
             {Array.from({ length: RING_COUNT }).map((_, i) => (
-              <div key={i} className="relative flex items-center justify-center">
-                <div
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    borderRadius: '50%',
-                    background: 'radial-gradient(circle at 35% 30%, #d4a870, #7a3a18)',
-                    boxShadow: 'inset 0 2px 3px rgba(0,0,0,0.65), 0 1px 2px rgba(255,255,255,0.18)',
-                  }}
-                />
-                <div
-                  className="absolute"
-                  style={{
-                    width: '9px',
-                    height: '9px',
-                    borderRadius: '50%',
-                    background: '#0a0502',
-                    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.8)',
-                  }}
-                />
-              </div>
+              <Ring key={i} />
             ))}
           </div>
 
-          {/* Page area */}
+          {/* ── PAGE AREA ── */}
           <div
-            className="flex-1 relative overflow-hidden"
             style={{
-              background: '#FDF6E9',
-              minHeight: 'min(68vh, 560px)',
-              maxHeight: 'min(68vh, 560px)',
-              perspective: '1000px',
+              flex: 1,
+              minHeight: 'min(73vh, 620px)',
+              maxHeight: 'min(73vh, 620px)',
+              position: 'relative',
+              overflow: 'hidden',
+              perspective: '1200px',
             }}
           >
-            {/* Ruled lines */}
+            {/* Paper base — warm aged ivory */}
             <div
-              className="absolute inset-0 pointer-events-none select-none"
               style={{
-                backgroundImage:
-                  'repeating-linear-gradient(transparent, transparent 27px, rgba(100,70,50,0.11) 27px, rgba(100,70,50,0.11) 28px)',
-                backgroundPositionY: '46px',
-              }}
-            />
-            {/* Red margin line */}
-            <div
-              className="absolute top-0 bottom-0 pointer-events-none"
-              style={{ left: '42px', width: '1px', background: 'rgba(195,55,55,0.2)' }}
-            />
-            {/* Dog-ear corner */}
-            <div
-              className="absolute top-0 right-0 pointer-events-none"
-              style={{
-                width: 0,
-                height: 0,
-                borderStyle: 'solid',
-                borderWidth: '0 18px 18px 0',
-                borderColor: 'transparent rgba(200,170,130,0.35) transparent transparent',
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(160deg, #F8F0DC 0%, #F4EACF 35%, #F6EED8 65%, #F2E7CA 100%)',
               }}
             />
 
-            {/* ── Section color tabs (right edge) ── */}
+            {/* Paper grain (SVG fractal noise) */}
             <div
-              className="absolute right-0 top-0 bottom-0 flex flex-col justify-around items-end py-3 pointer-events-none"
-              style={{ width: '18px', zIndex: 10 }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: '#A07840',
+                filter: 'url(#nb-grain)',
+                opacity: 1,
+                mixBlendMode: 'multiply',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Subtle paper imperfection tonal spots */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: `
+                  radial-gradient(ellipse 28% 14% at 18% 22%, rgba(180,145,80,0.05) 0%, transparent 100%),
+                  radial-gradient(ellipse 18% 22% at 82% 72%, rgba(160,125,65,0.04) 0%, transparent 100%),
+                  radial-gradient(ellipse 22% 10% at 58% 48%, rgba(200,165,90,0.03) 0%, transparent 100%)
+                `,
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* College-ruled lines (blue-ish, real notebook look) */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage:
+                  'repeating-linear-gradient(transparent, transparent 27px, rgba(65,95,175,0.1) 27px, rgba(65,95,175,0.1) 28px)',
+                backgroundPositionY: '48px',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Single header line (pink-red, thicker) */}
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: '48px',
+                height: '1.5px',
+                background: 'rgba(185,90,90,0.18)',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Red margin line */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: '52px',
+                width: '1.5px',
+                background: 'rgba(192,52,52,0.3)',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Binding shadow — left edge */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: '30px',
+                background:
+                  'linear-gradient(to right, rgba(0,0,0,0.11) 0%, rgba(0,0,0,0.04) 65%, transparent 100%)',
+                pointerEvents: 'none',
+                zIndex: 3,
+              }}
+            />
+
+            {/* Page aging vignette (edges slightly darker) */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'radial-gradient(ellipse 92% 92% at 50% 50%, transparent 58%, rgba(130,95,45,0.08) 100%)',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Dog-ear corner */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: 0,
+                height: 0,
+                borderStyle: 'solid',
+                borderWidth: '0 24px 24px 0',
+                borderColor: 'transparent #D4C090 transparent transparent',
+                pointerEvents: 'none',
+                zIndex: 6,
+              }}
+            />
+            {/* Dog-ear crease shadow */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: '26px',
+                height: '26px',
+                background:
+                  'linear-gradient(135deg, transparent 46%, rgba(0,0,0,0.14) 46%)',
+                pointerEvents: 'none',
+                zIndex: 6,
+              }}
+            />
+
+            {/* ── Section colour tabs (right edge) ── */}
+            <div
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-around',
+                alignItems: 'flex-end',
+                padding: '14px 0',
+                width: '20px',
+                zIndex: 10,
+                pointerEvents: 'none',
+              }}
             >
               {sections.map((sec) => {
                 const active = sec.id === currentSection;
                 return (
                   <motion.div
                     key={sec.id}
-                    animate={{
-                      width: active ? 16 : 8,
-                      opacity: active ? 1 : 0.38,
-                    }}
-                    transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                    animate={{ width: active ? 18 : 9, opacity: active ? 1 : 0.38 }}
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                     style={{
-                      height: '22px',
+                      height: '27px',
                       background: sec.color,
-                      borderRadius: '3px 0 0 3px',
-                      boxShadow: active ? `0 0 8px ${sec.glow}` : 'none',
+                      borderRadius: '4px 0 0 4px',
+                      boxShadow: active
+                        ? `0 0 11px ${sec.glow}, inset 0 1px 0 rgba(255,255,255,0.24), inset 0 -1px 0 rgba(0,0,0,0.14)`
+                        : 'none',
                     }}
                   />
                 );
@@ -219,30 +405,31 @@ export function Notebook({
                 variants={{
                   enter: (d: number) => ({
                     opacity: 0,
-                    rotateY: d > 0 ? 28 : -28,
-                    x: d > 0 ? 40 : -40,
+                    rotateY: d > 0 ? 32 : -32,
+                    x: d > 0 ? 48 : -48,
                     scale: 0.97,
                   }),
                   center: { opacity: 1, rotateY: 0, x: 0, scale: 1 },
                   exit: (d: number) => ({
                     opacity: 0,
-                    rotateY: d > 0 ? -28 : 28,
-                    x: d > 0 ? -40 : 40,
+                    rotateY: d > 0 ? -32 : 32,
+                    x: d > 0 ? -48 : 48,
                     scale: 0.97,
                   }),
                 }}
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] as const }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
                 className="absolute inset-0 overflow-y-auto scrollbar-hide"
                 style={{
-                  paddingLeft: '52px',
-                  paddingRight: '22px',
-                  paddingTop: '10px',
-                  paddingBottom: '10px',
+                  paddingLeft: '64px',
+                  paddingRight: '26px',
+                  paddingTop: '14px',
+                  paddingBottom: '14px',
                   transformStyle: 'preserve-3d',
                   willChange: 'transform, opacity',
+                  zIndex: 5,
                 }}
               >
                 {children}
@@ -252,36 +439,112 @@ export function Notebook({
         </div>
 
         {/* ── Navigation bar ── */}
-        <div className="flex items-center justify-between mt-3 px-1" style={{ zIndex: 2 }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: '10px',
+            paddingLeft: '4px',
+            paddingRight: '4px',
+            position: 'relative',
+            zIndex: 2,
+          }}
+        >
           <span
-            className="text-amber-300/38 text-xs tracking-[0.22em] uppercase truncate"
-            style={{ maxWidth: '130px', fontFamily: "'Georgia', serif" }}
+            style={{
+              fontFamily: "'Caveat', 'Georgia', serif",
+              fontSize: '15px',
+              color: 'rgba(255,195,140,0.42)',
+              letterSpacing: '0.04em',
+              maxWidth: '145px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
           >
             {chapterLabel}
           </span>
 
-          <div className="flex items-center gap-2.5">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <NavButton onClick={onPrev} enabled={canGoPrev} aria-label="Previous page">
               <ChevronLeft className="w-3.5 h-3.5" />
             </NavButton>
-
             <span
-              className="text-amber-200/28 text-xs tabular-nums"
               style={{
-                fontFamily: "'Georgia', serif",
+                fontFamily: "'Caveat', 'Georgia', serif",
+                fontSize: '14px',
+                color: 'rgba(255,208,168,0.32)',
                 minWidth: '3.5rem',
                 textAlign: 'center',
               }}
             >
               {pageNumber} / {totalPages}
             </span>
-
             <NavButton onClick={onNext} enabled={canGoNext} aria-label="Next page">
               <ChevronRight className="w-3.5 h-3.5" />
             </NavButton>
           </div>
         </div>
       </motion.div>
+    </div>
+  );
+}
+
+function Ring() {
+  return (
+    <div
+      style={{
+        width: '30px',
+        height: '26px',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+        zIndex: 1,
+      }}
+    >
+      {/* Outer ring — conic gradient for metallic sheen */}
+      <div
+        style={{
+          width: '24px',
+          height: '24px',
+          borderRadius: '50%',
+          background:
+            'conic-gradient(from 195deg at 50% 50%, #f0d878, #c89830, #7a5510, #9a7020, #c89830, #f0d878, #fae898, #f0d878)',
+          boxShadow:
+            '0 2px 6px rgba(0,0,0,0.68), 0 -1px 2px rgba(255,225,130,0.14)',
+          position: 'relative',
+          flexShrink: 0,
+        }}
+      />
+      {/* Inner hole */}
+      <div
+        style={{
+          position: 'absolute',
+          width: '12px',
+          height: '12px',
+          borderRadius: '50%',
+          background:
+            'radial-gradient(circle at 38% 32%, #1c0c00, #050100)',
+          boxShadow: 'inset 0 2px 5px rgba(0,0,0,0.95)',
+        }}
+      />
+      {/* Highlight spot */}
+      <div
+        style={{
+          position: 'absolute',
+          width: '7px',
+          height: '3px',
+          borderRadius: '50%',
+          background: 'rgba(255,248,198,0.58)',
+          top: '5px',
+          left: '8px',
+          filter: 'blur(0.5px)',
+          pointerEvents: 'none',
+        }}
+      />
     </div>
   );
 }
@@ -299,20 +562,20 @@ function NavButton({
 }) {
   return (
     <motion.button
-      onClick={onClick}
+      onClick={() => onClick()}
       disabled={!enabled}
       whileHover={enabled ? { scale: 1.12 } : {}}
       whileTap={enabled ? { scale: 0.88 } : {}}
       aria-label={ariaLabel}
       style={{
-        width: '28px',
-        height: '28px',
+        width: '30px',
+        height: '30px',
         borderRadius: '50%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: enabled ? 'rgba(140,32,32,0.52)' : 'rgba(60,30,30,0.2)',
-        border: `1px solid ${enabled ? 'rgba(185,60,60,0.55)' : 'rgba(100,50,50,0.18)'}`,
+        background: enabled ? 'rgba(140,32,32,0.56)' : 'rgba(60,30,30,0.22)',
+        border: `1px solid ${enabled ? 'rgba(185,60,60,0.56)' : 'rgba(100,50,50,0.18)'}`,
         color: enabled ? 'rgba(255,210,190,0.88)' : 'rgba(180,120,100,0.22)',
         cursor: enabled ? 'pointer' : 'not-allowed',
         transition: 'background 0.2s, border-color 0.2s',
