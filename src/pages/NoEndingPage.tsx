@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 
 const serif = "'Georgia', 'Times New Roman', serif";
+const hand  = "'Caveat', 'Georgia', serif";
 
 export function NoEndingPage() {
   return (
@@ -11,53 +12,113 @@ export function NoEndingPage() {
     >
       {/* Dim heart */}
       <Heart
-        className="w-12 h-12 text-stone-500/35"
+        style={{
+          width: '46px',
+          height: '46px',
+          color: 'rgba(90,80,80,0.32)',
+        }}
         fill="currentColor"
       />
 
       {/* Title */}
       <div>
-        <h1 className="text-2xl font-light text-stone-700/78 mb-1.5" style={{ fontFamily: serif }}>
+        <h1
+          style={{
+            fontFamily: hand,
+            fontSize: '2.1rem',
+            fontWeight: 600,
+            color: 'rgba(55,40,25,0.72)',
+            lineHeight: 1.1,
+            marginBottom: '5px',
+          }}
+        >
           I understand
         </h1>
-        <p className="text-base text-stone-500/62 italic font-light" style={{ fontFamily: serif }}>
+        <p
+          style={{
+            fontFamily: serif,
+            fontSize: '0.84rem',
+            color: 'rgba(70,58,40,0.58)',
+            fontStyle: 'italic',
+          }}
+        >
           Maybe some stories are not meant to have a second chance.
         </p>
       </div>
 
       {/* Divider */}
-      <div className="flex items-center gap-2 opacity-20 w-full max-w-[160px]">
-        <div className="h-px flex-1 bg-stone-600" />
-        <div className="w-1 h-1 rounded-full bg-stone-600" />
-        <div className="h-px flex-1 bg-stone-600" />
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          opacity: 0.18,
+          width: '100%',
+          maxWidth: '160px',
+        }}
+      >
+        <div style={{ height: '1px', flex: 1, background: '#5a5050' }} />
+        <div
+          style={{
+            width: '4px',
+            height: '4px',
+            borderRadius: '50%',
+            background: '#5a5050',
+            flexShrink: 0,
+          }}
+        />
+        <div style={{ height: '1px', flex: 1, background: '#5a5050' }} />
       </div>
 
       <p
-        className="text-stone-600/58 text-sm italic leading-relaxed"
-        style={{ fontFamily: serif, maxWidth: '300px' }}
+        style={{
+          fontFamily: serif,
+          fontSize: '0.84rem',
+          color: 'rgba(60,45,25,0.55)',
+          fontStyle: 'italic',
+          lineHeight: 1.72,
+          maxWidth: '295px',
+        }}
       >
-          Thank you for every memory, every smile, and every moment we shared.
-          No matter what happens next, a part of my heart will always carry your name.
+        Thank you for every memory, every smile, and every moment we shared.
+        No matter what happens next, a part of my heart will always carry your name.
       </p>
 
       {/* Three dots */}
-      <div className="flex gap-2.5">
+      <div style={{ display: 'flex', gap: '10px' }}>
         {[0, 1, 2].map((i) => (
           <motion.div
             key={i}
-            className="rounded-full"
-            style={{ width: '6px', height: '6px', background: 'rgba(100,100,110,0.32)' }}
-            animate={{ opacity: [0.28, 0.55, 0.28] }}
+            style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              background: 'rgba(90,80,70,0.3)',
+            }}
+            animate={{ opacity: [0.25, 0.55, 0.25] }}
             transition={{ duration: 2, delay: i * 0.3, repeat: Infinity, ease: 'easeInOut' }}
           />
         ))}
       </div>
 
-      <div className="space-y-0.5 mt-2">
-        <p className="text-stone-500/48 text-sm" style={{ fontFamily: serif }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '4px' }}>
+        <p
+          style={{
+            fontFamily: hand,
+            fontSize: '1rem',
+            color: 'rgba(70,55,30,0.45)',
+          }}
+        >
           (But I still want to say...)
         </p>
-        <p className="text-stone-400/38 text-xs italic" style={{ fontFamily: serif }}>
+        <p
+          style={{
+            fontFamily: serif,
+            fontSize: '0.76rem',
+            color: 'rgba(70,55,30,0.35)',
+            fontStyle: 'italic',
+          }}
+        >
           Even if this is goodbye, you were my favorite chapter.
         </p>
       </div>

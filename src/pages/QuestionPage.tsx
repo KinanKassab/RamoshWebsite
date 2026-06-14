@@ -8,6 +8,7 @@ interface QuestionPageProps {
 }
 
 const serif = "'Georgia', 'Times New Roman', serif";
+const hand  = "'Caveat', 'Georgia', serif";
 
 const ESCAPE_TEXTS = [
   "Think again... 💭",
@@ -17,7 +18,7 @@ const ESCAPE_TEXTS = [
 
 function randomPos() {
   const angle = Math.random() * 2 * Math.PI;
-  const dist = 150 + Math.random() * 100;
+  const dist  = 150 + Math.random() * 100;
   return {
     x: Math.round(Math.cos(angle) * dist),
     y: Math.round(Math.sin(angle) * dist * 0.45),
@@ -26,10 +27,10 @@ function randomPos() {
 
 export function QuestionPage({ onAnswer }: QuestionPageProps) {
   const [escapeCount, setEscapeCount] = useState(0);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [floatText, setFloatText] = useState('');
-  const [locked, setLocked] = useState(false);
-  const [prevAnswer, setPrevAnswer] = useState<string | null>(null);
+  const [pos,         setPos]         = useState({ x: 0, y: 0 });
+  const [floatText,   setFloatText]   = useState('');
+  const [locked,      setLocked]      = useState(false);
+  const [prevAnswer,  setPrevAnswer]  = useState<string | null>(null);
   const isEscaping = useRef(false);
 
   useEffect(() => {
@@ -57,12 +58,7 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
       track({ type: 'change-attempt', previousAnswer: prevAnswer ?? 'no' });
       return;
     }
-
-    if (escapeCount >= 3) {
-      onAnswer('no');
-      return;
-    }
-
+    if (escapeCount >= 3) { onAnswer('no'); return; }
     if (isEscaping.current) return;
     isEscaping.current = true;
 
@@ -89,15 +85,19 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
           <Heart
-            className="w-11 h-11 text-rose-500"
+            style={{
+              width: '44px',
+              height: '44px',
+              color: '#c04040',
+              filter: 'drop-shadow(0 2px 8px rgba(190,40,40,0.45))',
+            }}
             fill="currentColor"
-            style={{ filter: 'drop-shadow(0 2px 8px rgba(190,40,40,0.45))' }}
           />
         </motion.div>
-        <p className="text-stone-700 text-base font-light" style={{ fontFamily: serif }}>
+        <p style={{ fontFamily: hand, fontSize: '1.35rem', color: '#2a1808' }}>
           You already chose...
         </p>
-        <p className="text-stone-400 text-sm italic" style={{ fontFamily: serif }}>
+        <p style={{ fontFamily: serif, fontSize: '0.82rem', color: 'rgba(80,60,30,0.52)', fontStyle: 'italic' }}>
           why would you change that? 🥺
         </p>
       </div>
@@ -106,12 +106,17 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
 
   return (
     <div
-      className="flex flex-col items-center justify-center text-center gap-5 py-6"
+      className="flex flex-col items-center justify-center text-center gap-5 py-5"
       style={{ minHeight: '100%' }}
     >
       <p
-        className="text-rose-700/58 text-xs tracking-[0.3em] uppercase"
-        style={{ fontFamily: serif }}
+        style={{
+          fontFamily: hand,
+          fontSize: '13px',
+          color: 'rgba(160,55,55,0.58)',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+        }}
       >
         The Final Chapter
       </p>
@@ -121,51 +126,93 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
       >
         <Heart
-          className="w-11 h-11 text-rose-600"
+          style={{
+            width: '44px',
+            height: '44px',
+            color: '#c04040',
+            filter: 'drop-shadow(0 2px 8px rgba(190,40,40,0.5))',
+          }}
           fill="currentColor"
-          style={{ filter: 'drop-shadow(0 2px 8px rgba(190,40,40,0.5))' }}
         />
       </motion.div>
 
-      <div className="space-y-1.5">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         <h2
-          className="text-2xl font-light text-stone-800 leading-tight"
-          style={{ fontFamily: serif }}
+          style={{
+            fontFamily: hand,
+            fontSize: '1.75rem',
+            fontWeight: 600,
+            color: '#2a1808',
+            lineHeight: 1.1,
+          }}
         >
           I have a question...
         </h2>
         <p
-          className="text-lg text-stone-600/75 italic font-light"
-          style={{ fontFamily: serif }}
+          style={{
+            fontFamily: hand,
+            fontSize: '1.2rem',
+            color: 'rgba(60,40,15,0.72)',
+            fontStyle: 'italic',
+            lineHeight: 1.4,
+          }}
         >
-          If time turned back for us...<br />
+          If time turned back for us…<br />
           would you start the talk again?
         </p>
       </div>
 
-      <div className="flex items-center gap-2 opacity-25 w-full max-w-[200px]">
-        <div className="h-px flex-1 bg-stone-700" />
-        <div className="w-1.5 h-1.5 rotate-45 bg-stone-700" />
-        <div className="h-px flex-1 bg-stone-700" />
+      {/* Diamond divider */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          opacity: 0.22,
+          width: '100%',
+          maxWidth: '200px',
+        }}
+      >
+        <div style={{ height: '1px', flex: 1, background: '#4a3820' }} />
+        <div
+          style={{
+            width: '7px',
+            height: '7px',
+            transform: 'rotate(45deg)',
+            background: '#4a3820',
+            flexShrink: 0,
+          }}
+        />
+        <div style={{ height: '1px', flex: 1, background: '#4a3820' }} />
       </div>
 
-      <div className="flex gap-3 w-full" style={{ position: 'relative' }}>
+      <div
+        style={{ display: 'flex', gap: '12px', width: '100%', position: 'relative' }}
+      >
+        {/* Yes button */}
         <motion.button
           onClick={handleYes}
           whileHover={{ scale: 1.04, y: -1 }}
           whileTap={{ scale: 0.96 }}
-          className="flex-1 py-3 text-sm font-light tracking-wide rounded-sm"
           style={{
-            background: 'rgba(160,30,30,0.07)',
-            border: '1px solid rgba(175,45,45,0.38)',
-            color: '#8b1a1a',
-            fontFamily: serif,
-            boxShadow: '0 2px 8px rgba(160,30,30,0.08)',
+            flex: 1,
+            padding: '12px 0',
+            fontFamily: hand,
+            fontSize: '1.1rem',
+            fontWeight: 600,
+            color: '#7a1414',
+            background: 'rgba(155,28,28,0.07)',
+            border: '1px solid rgba(170,42,42,0.35)',
+            borderRadius: '2px',
+            cursor: 'pointer',
+            letterSpacing: '0.04em',
+            boxShadow: '0 2px 8px rgba(155,28,28,0.07)',
           }}
         >
           Yes
         </motion.button>
 
+        {/* No button (escapes) */}
         <div style={{ flex: 1, position: 'relative' }}>
           <AnimatePresence>
             {floatText && (
@@ -181,9 +228,9 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
                   left: '50%',
                   transform: 'translateX(-50%)',
                   whiteSpace: 'nowrap',
-                  fontSize: '0.72rem',
-                  color: '#9a8a7a',
-                  fontFamily: serif,
+                  fontFamily: hand,
+                  fontSize: '0.9rem',
+                  color: 'rgba(90,70,40,0.75)',
                   fontStyle: 'italic',
                   pointerEvents: 'none',
                 }}
@@ -197,12 +244,16 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
             onClick={handleNo}
             animate={{ x: pos.x, y: pos.y }}
             transition={{ type: 'spring', stiffness: 280, damping: 18 }}
-            className="w-full py-3 text-sm font-light tracking-wide rounded-sm"
             style={{
+              width: '100%',
+              padding: '12px 0',
+              fontFamily: hand,
+              fontSize: '1.1rem',
+              color: 'rgba(70,65,80,0.7)',
               background: 'rgba(80,80,100,0.04)',
               border: '1px solid rgba(100,100,130,0.18)',
-              color: '#5a5a6a',
-              fontFamily: serif,
+              borderRadius: '2px',
+              cursor: 'pointer',
               position: 'relative',
               zIndex: 10,
             }}
@@ -213,10 +264,14 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
       </div>
 
       <motion.p
-        animate={{ opacity: [0.25, 0.5, 0.25] }}
+        animate={{ opacity: [0.22, 0.45, 0.22] }}
         transition={{ duration: 3, repeat: Infinity }}
-        className="text-stone-500/38 text-xs"
-        style={{ fontFamily: serif }}
+        style={{
+          fontFamily: serif,
+          fontSize: '0.75rem',
+          color: 'rgba(70,55,30,0.38)',
+          fontStyle: 'italic',
+        }}
       >
         Choose with your heart
       </motion.p>

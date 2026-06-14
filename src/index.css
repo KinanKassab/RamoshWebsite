@@ -60,23 +60,36 @@ body {
   will-change: opacity, transform;
 }
 
-/* Legacy CSS keyframes kept for backward compat */
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes inkAppear {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ink-appear {
+  animation: inkAppear 0.4s ease forwards;
+}
+
+.font-handwriting {
+  font-family: 'Caveat', 'Georgia', serif;
+}
+
+/* Washi tape stripe overlay pattern */
+.washi-stripe {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.18) 0px,
+    rgba(255,255,255,0.18) 2px,
+    transparent 2px,
+    transparent 6px
+  );
 }
