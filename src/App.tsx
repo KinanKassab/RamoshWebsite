@@ -4,7 +4,6 @@ import { Notebook, SectionTab } from './components/Notebook';
 import { LockScreen } from './components/LockScreen';
 import { CoverPage } from './pages/CoverPage';
 import { MemoryPage } from './pages/MemoryPage';
-import { TimelinePage } from './pages/TimelinePage';
 import { LetterPage } from './pages/LetterPage';
 import { QuestionPage } from './pages/QuestionPage';
 import { YesEndingPage } from './pages/YesEndingPage';
@@ -17,8 +16,7 @@ import { track } from './utils/track';
 type PageId =
   | 'cover'
   | 'memory-1' | 'memory-2' | 'memory-3' | 'memory-4'
-  | 'memory-5' | 'memory-6' | 'memory-7'
-  | 'timeline'
+  | 'memory-5' | 'memory-6'
   | 'letter'
   | 'question'
   | 'yes-ending'
@@ -27,8 +25,7 @@ type PageId =
 const BASE_PAGES: PageId[] = [
   'cover',
   'memory-1', 'memory-2', 'memory-3', 'memory-4',
-  'memory-5', 'memory-6', 'memory-7',
-  'timeline',
+  'memory-5', 'memory-6',
   'letter',
   'question',
 ];
@@ -41,8 +38,6 @@ const CHAPTER_LABELS: Record<string, string> = {
   'memory-4': 'Memory IV',
   'memory-5': 'Memory V',
   'memory-6': 'Memory VI',
-  'memory-7': 'Memory VII',
-  timeline: 'Our Story',
   letter: 'A Letter',
   question: 'The Question',
   'yes-ending': 'Forever',
@@ -53,7 +48,6 @@ const CHAPTER_LABELS: Record<string, string> = {
 const SECTIONS: SectionTab[] = [
   { id: 'cover',     color: '#b82828', glow: 'rgba(184,40,40,0.55)' },
   { id: 'memories',  color: '#c47820', glow: 'rgba(196,120,32,0.55)' },
-  { id: 'timeline',  color: '#7040c0', glow: 'rgba(112,64,192,0.55)' },
   { id: 'letter',    color: '#1870a8', glow: 'rgba(24,112,168,0.55)' },
   { id: 'question',  color: '#2e7d4f', glow: 'rgba(46,125,79,0.55)' },
 ];
@@ -61,7 +55,6 @@ const SECTIONS: SectionTab[] = [
 function getSectionForPage(page: PageId): string {
   if (page === 'cover') return 'cover';
   if (page.startsWith('memory-')) return 'memories';
-  if (page === 'timeline') return 'timeline';
   if (page === 'letter') return 'letter';
   return 'question';
 }
@@ -84,7 +77,6 @@ export default function App() {
   const [answer, setAnswer] = useState<'yes' | 'no' | null>(null);
 
   const pageEnterTime = useRef(Date.now());
-  const prevPage = useRef<string | null>(null);
 
   const pages: PageId[] = answer
     ? ([...BASE_PAGES, `${answer}-ending`] as PageId[])
@@ -96,13 +88,8 @@ export default function App() {
   const canGoNext = !isEndingPage && !isQuestionPage && pageIndex < pages.length - 1;
   const canGoPrev = pageIndex > 0 && !isEndingPage;
 
-  /* Track time spent on each page */
+  /* Reset timer when page changes */
   useEffect(() => {
-    if (prevPage.current !== null) {
-      const secs = Math.round((Date.now() - pageEnterTime.current) / 1000);
-      track({ type: 'page_time', page: prevPage.current, seconds: secs });
-    }
-    prevPage.current = currentPage;
     pageEnterTime.current = Date.now();
   }, [currentPage]);
 
@@ -116,14 +103,16 @@ export default function App() {
 
   const goNext = (method: 'button' | 'swipe' | 'key' = 'button') => {
     if (!canGoNext) return;
-    track({ type: 'navigate', dir: 'next', from: currentPage, to: pages[pageIndex + 1], method });
+    const secs = Math.round((Date.now() - pageEnterTime.current) / 1000);
+    track({ type: 'navigate', dir: 'next', from: currentPage, to: pages[pageIndex + 1], method, seconds: secs });
     setDirection(1);
     setPageIndex((p) => p + 1);
   };
 
   const goPrev = (method: 'button' | 'swipe' | 'key' = 'button') => {
     if (!canGoPrev) return;
-    track({ type: 'navigate', dir: 'prev', from: currentPage, to: pages[pageIndex - 1], method });
+    const secs = Math.round((Date.now() - pageEnterTime.current) / 1000);
+    track({ type: 'navigate', dir: 'prev', from: currentPage, to: pages[pageIndex - 1], method, seconds: secs });
     setDirection(-1);
     setPageIndex((p) => p - 1);
   };
@@ -166,7 +155,6 @@ export default function App() {
       );
     }
 
-    if (currentPage === 'timeline')   return <TimelinePage />;
     if (currentPage === 'letter')     return <LetterPage />;
     if (currentPage === 'question')   return <QuestionPage onAnswer={handleAnswer} />;
     if (currentPage === 'yes-ending') return <YesEndingPage />;

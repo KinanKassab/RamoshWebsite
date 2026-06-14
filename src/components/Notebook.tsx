@@ -100,7 +100,7 @@ export function Notebook({
             inset: 0,
             bottom: '-5px',
             right: '-4px',
-            background: '#FDF0D8',
+            background: '#F0D8',
             zIndex: 1,
           }}
         />

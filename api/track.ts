@@ -4,7 +4,6 @@ const PAGE_AR: Record<string, string> = {
   cover:      'الغلاف',
   'memory-1': 'ذكرى ١', 'memory-2': 'ذكرى ٢', 'memory-3': 'ذكرى ٣',
   'memory-4': 'ذكرى ٤', 'memory-5': 'ذكرى ٥', 'memory-6': 'ذكرى ٦', 'memory-7': 'ذكرى ٧',
-  timeline:   'قصتنا',
   letter:     'الرسالة',
   question:   'السؤال',
   'yes-ending': 'النهاية ♥',
@@ -26,23 +25,38 @@ export default async function handler(req: any, res: any) {
   let msg = '';
 
   switch (body.type) {
-    case 'visit':
-      msg = `👁️ <b>فتح الموقع</b>\n\n${dev}\n🌐 <code>${ip}</code>\n🕐 ${ts}`;
+    case 'visit': {
+      const statusLabel =
+        body.siteStatus === 'opened'    ? '✅ الدفتر مفتوح بالفعل' :
+        body.siteStatus === 'locked'    ? '🔒 الموقع مقفول' :
+        body.siteStatus === 'available' ? `🟡 متاح — ${body.attemptsLeft} محاولات متبقية` :
+                                          '⚪ حالة غير معروفة';
+      msg = `👁️ <b>فتح الموقع</b>\n${statusLabel}\n\n${dev}\n🌐 <code>${ip}</code>\n🕐 ${ts}`;
       break;
+    }
+
+    case 'no-attempt': {
+      const attempt = body.attempt as number;
+      const x = body.x as number;
+      const y = body.y as number;
+      msg = `🏃 <b>زر "لأ" هرب!</b>\nمحاولة <b>${attempt}</b> من 3\nالإحداثيات: (${x > 0 ? '+' : ''}${x}, ${y > 0 ? '+' : ''}${y})\n\n${dev}\n🕐 ${ts}`;
+      break;
+    }
+
+    case 'change-attempt': {
+      const prev = body.previousAnswer === 'yes' ? '✅ نعم' : '❌ لأ';
+      msg = `🔄 <b>حاولت تغيير الإجابة!</b>\nاختارت من قبل: ${prev}\n\n${dev}\n🕐 ${ts}`;
+      break;
+    }
 
     case 'navigate': {
       const arrow  = body.dir === 'next' ? '→' : '←';
       const method =
         body.method === 'swipe' ? '👆 سحب'   :
         body.method === 'key'   ? '⌨️ كيبورد' : '🖱️ زر';
-      msg = `📖 ${method} ${arrow}\n<b>${p(body.from)}</b> ← <b>${p(body.to)}</b>\n\n${dev}\n🕐 ${ts}`;
-      break;
-    }
-
-    case 'page_time': {
       const secs = body.seconds as number;
-      if (secs < 3) { res.json({ ok: true }); return; }
-      msg = `⏱️ قضت <b>${secs}ث</b> في "<b>${p(body.page)}</b>"\n\n${dev}\n🕐 ${ts}`;
+      const timeStr = secs >= 1 ? `\n⏱️ قضت <b>${secs}ث</b> في "${p(body.from)}"` : '';
+      msg = `📖 ${method} ${arrow}\n<b>${p(body.from)}</b> → <b>${p(body.to)}</b>${timeStr}\n\n${dev}\n🕐 ${ts}`;
       break;
     }
   }

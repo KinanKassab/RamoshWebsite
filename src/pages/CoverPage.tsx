@@ -16,7 +16,7 @@ export function CoverPage() {
         className="text-rose-700/65 text-xs tracking-[0.35em] uppercase"
         style={{ fontFamily: serif }}
       >
-        For the most special person
+        For my most special person
       </p>
 
       {/* Pulsing heart */}
@@ -37,13 +37,13 @@ export function CoverPage() {
           className="text-4xl font-light text-stone-800 leading-tight"
           style={{ fontFamily: serif }}
         >
-          Happy Birthday
+          Welcom back
         </h1>
         <p
           className="text-rose-700/45 text-sm tracking-[0.2em] uppercase mt-1"
           style={{ fontFamily: serif }}
         >
-          A Story Just For You
+          A website Just For You
         </p>
       </div>
 
@@ -52,19 +52,20 @@ export function CoverPage() {
       {/* Quote */}
       <p
         className="text-stone-600/60 text-sm italic leading-relaxed"
-        style={{ fontFamily: serif, maxWidth: '210px' }}
+        style={{ fontFamily: serif, maxWidth: '280px' }}
       >
-        "There's something I've been wanting to tell you..."
+        "I didn't build this website to impress you... <br />
+        I built it because I couldn't leave these words unsaid."
       </p>
 
       {/* Turn page hint */}
       <motion.p
-        animate={{ opacity: [0.25, 0.55, 0.25] }}
-        transition={{ duration: 2.2, repeat: Infinity }}
-        className="text-stone-500/35 text-xs tracking-widest mt-4"
+        animate={{ opacity: [0.25, 0.5, 0.7, 1, 0.7, 0.5] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        className="text-amber-300 text-s tracking-widest mt-4"
         style={{ fontFamily: serif }}
       >
-        turn the page →
+        swip to the next page →
       </motion.p>
     </div>
   );

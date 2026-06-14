@@ -106,21 +106,27 @@ export function LetterPage() {
             className="space-y-3.5"
           >
             <p className="text-stone-700/82 text-sm leading-relaxed italic" style={{ fontFamily: serif }}>
-              "Distance is just a number. What really matters is the feeling that no matter how many miles separate us, you're always here with me.
+              "Hello again, how it's going? I hope you enjoy your days without me, but I also hope you miss me a little. I miss you a lot. I miss your voice, your smile, your laugh, and the way you make me feel like I'm the only person in the world that matters.
             </p>
             <p className="text-stone-700/82 text-sm leading-relaxed italic" style={{ fontFamily: serif }}>
-              Every message from you lights up my world. Every call feels like coming home. And every night, I look at the same moon knowing you do too.
+              I know we can't be together again, but somehow my heart still refuses to fully let go of you.
             </p>
             <p className="text-stone-700/82 text-sm leading-relaxed italic" style={{ fontFamily: serif }}>
-              I carry you in my heart everywhere I go. And that makes anywhere feel like home."
+              It’s strange how something that hurt me this much can still feel like home in some quiet corner of my chest. I keep telling myself that I deserve something real, something honest… not something that let me the second option from its world.
             </p>
-
+            <p className="text-stone-700/82 text-sm leading-relaxed italic" style={{ fontFamily: serif }}>
+              Maybe missing you isn’t about wanting you back, but about letting go of what I thought we were. And that’s the hardest part—accepting that the version of you I loved never really existed the way I believed it did. 
+            </p>            
+            <p className="text-stone-700/82 text-sm leading-relaxed italic" style={{ fontFamily: serif }}>
+              Still… I hope one day I’ll think of you without this heaviness. Not with love, not with pain—just peace.
+            </p>              
+            <p className="text-rose-700/55 text-sm italic" style={{ fontFamily: serif }}>
+              love you, but I can’t be with you. I hope you find someone who can love you the way that you wanted to.
+            </p>
+            
             <div className="text-right pt-1">
-              <p className="text-rose-700/55 text-sm italic" style={{ fontFamily: serif }}>
-                Forever yours,
-              </p>
-              <p className="text-stone-800 text-base mt-0.5" style={{ fontFamily: serif }}>
-                — Me
+              <p className="text-stone-800 text-base mt-0.5" style={{ fontFamily: "'Great Vibes'" }}>
+                — Kinan
               </p>
             </div>
 

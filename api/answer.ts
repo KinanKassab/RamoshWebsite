@@ -1,4 +1,4 @@
-import { tg, now } from './utils';
+import { tg, redis, now } from './utils.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function handler(req: any, res: any) {
@@ -11,6 +11,9 @@ export default async function handler(req: any, res: any) {
     ? `💕 <b>قالت نعم!</b> 🎊🥹\n\n🕐 ${ts}`
     : `💔 <b>قالت لا...</b>\n\n🕐 ${ts}`;
 
-  await tg(msg);
+  await Promise.all([
+    tg(msg),
+    redis.set('answer:choice', answer),
+  ]);
   res.json({ ok: true });
 }

@@ -21,7 +21,7 @@ export function NoEndingPage() {
           I understand
         </h1>
         <p className="text-base text-stone-500/62 italic font-light" style={{ fontFamily: serif }}>
-          I'll always cherish what we have
+          Maybe some stories are not meant to have a second chance.
         </p>
       </div>
 
@@ -34,9 +34,10 @@ export function NoEndingPage() {
 
       <p
         className="text-stone-600/58 text-sm italic leading-relaxed"
-        style={{ fontFamily: serif, maxWidth: '200px' }}
+        style={{ fontFamily: serif, maxWidth: '300px' }}
       >
-        Your happiness is what matters most to me.
+          Thank you for every memory, every smile, and every moment we shared.
+          No matter what happens next, a part of my heart will always carry your name.
       </p>
 
       {/* Three dots */}
@@ -52,13 +53,12 @@ export function NoEndingPage() {
         ))}
       </div>
 
-      {/* Birthday note */}
       <div className="space-y-0.5 mt-2">
         <p className="text-stone-500/48 text-sm" style={{ fontFamily: serif }}>
-          Happy Birthday
+          (But I still want to say...)
         </p>
         <p className="text-stone-400/38 text-xs italic" style={{ fontFamily: serif }}>
-          May all your wishes come true
+          Even if this is goodbye, you were my favorite chapter.
         </p>
       </div>
     </div>

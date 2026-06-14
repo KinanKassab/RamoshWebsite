@@ -56,12 +56,4 @@ export const memories: Memory[] = [
     date: '2 May 2026',
     rotation: 0.9,
   },
-  {
-    id: 7,
-    image: '/images/Car-1.webp',
-    title: 'The Last One',
-    description: "A bittersweet reminder of all the love and memories we shared. The warmth in your eyes — I'm reminded every time I see it of how much I love you.",
-    date: '31 May 2026',
-    rotation: -1.6,
-  },
 ];

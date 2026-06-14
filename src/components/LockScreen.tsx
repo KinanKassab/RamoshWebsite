@@ -33,10 +33,11 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
 
   /* Check global state on mount */
   useEffect(() => {
-    track({ type: 'visit' });
     fetch('/api/state')
       .then(r => r.json())
       .then((s: { locked: boolean; opened: boolean; attemptsLeft: number }) => {
+        const siteStatus = s.opened ? 'opened' : s.locked ? 'locked' : 'available';
+        track({ type: 'visit', siteStatus, attemptsLeft: s.attemptsLeft });
         if (s.locked || s.opened) {
           setStatus('locked');
         } else {
@@ -44,7 +45,10 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
           setStatus('idle');
         }
       })
-      .catch(() => setStatus('idle')); // degrade gracefully
+      .catch(() => {
+        track({ type: 'visit', siteStatus: 'unknown' });
+        setStatus('idle');
+      });
   }, []);
 
   const fire = async (key: string) => {
