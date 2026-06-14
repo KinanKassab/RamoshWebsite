@@ -11,9 +11,9 @@ const serif = "'Georgia', 'Times New Roman', serif";
 const hand  = "'Caveat', 'Georgia', serif";
 
 const ESCAPE_TEXTS = [
-  "Think again... 💭",
-  "Are you sure? 🙈",
-  "One more try ✨",
+  "Think again... ",
+  "Are you sure?",
+  "One more try!",
 ];
 
 function randomPos() {
@@ -64,14 +64,14 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
 
     const nextPos = randomPos();
     setPos(nextPos);
-    setFloatText(ESCAPE_TEXTS[escapeCount] ?? '🙈');
+    setFloatText(ESCAPE_TEXTS[escapeCount] ?? '???');
     track({ type: 'no-attempt', attempt: escapeCount + 1, x: nextPos.x, y: nextPos.y });
 
     setTimeout(() => {
       setFloatText('');
       setEscapeCount((c) => c + 1);
       isEscaping.current = false;
-    }, 700);
+    }, 1000);
   };
 
   if (locked) {
