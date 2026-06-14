@@ -37,7 +37,7 @@ export function NoEndingPage() {
         style={{ fontFamily: serif, maxWidth: '300px' }}
       >
           Thank you for every memory, every smile, and every moment we shared.
-          No matter what happens next, a part of my heart will always carry your name.
+          No matter what happens next, you'll always hold a special place in my heart.
       </p>
 
       {/* Three dots */}
