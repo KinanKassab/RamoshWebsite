@@ -18,10 +18,10 @@ const ESCAPE_TEXTS = [
 
 function randomPos() {
   const angle = Math.random() * 2 * Math.PI;
-  const dist  = 150 + Math.random() * 100;
+  const dist  = 55 + Math.random() * 35;
   return {
-    x: Math.round(Math.cos(angle) * dist),
-    y: Math.round(Math.sin(angle) * dist * 0.45),
+    x: Math.max(-85, Math.min(65, Math.round(Math.cos(angle) * dist))),
+    y: Math.max(-55, Math.min(55, Math.round(Math.sin(angle) * dist * 0.6))),
   };
 }
 
