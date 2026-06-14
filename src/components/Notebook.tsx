@@ -562,7 +562,7 @@ function NavButton({
 }) {
   return (
     <motion.button
-      onClick={onClick}
+      onClick={() => onClick()}
       disabled={!enabled}
       whileHover={enabled ? { scale: 1.12 } : {}}
       whileTap={enabled ? { scale: 0.88 } : {}}
