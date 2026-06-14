@@ -214,32 +214,6 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
 
         {/* No button (escapes) */}
         <div style={{ flex: 1, position: 'relative' }}>
-          <AnimatePresence>
-            {floatText && (
-              <motion.p
-                key={escapeCount}
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: -4 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.3 }}
-                style={{
-                  position: 'absolute',
-                  bottom: '110%',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  whiteSpace: 'nowrap',
-                  fontFamily: hand,
-                  fontSize: '0.9rem',
-                  color: 'rgba(90,70,40,0.75)',
-                  fontStyle: 'italic',
-                  pointerEvents: 'none',
-                }}
-              >
-                {floatText}
-              </motion.p>
-            )}
-          </AnimatePresence>
-
           <motion.button
             onClick={handleNo}
             animate={{ x: pos.x, y: pos.y }}
@@ -258,6 +232,32 @@ export function QuestionPage({ onAnswer }: QuestionPageProps) {
               zIndex: 10,
             }}
           >
+            {/* Float hint — inside the button so it moves with it */}
+            <AnimatePresence>
+              {floatText && (
+                <motion.span
+                  key={escapeCount}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: -4 }}
+                  exit={{ opacity: 0, y: -14 }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    position: 'absolute',
+                    bottom: '110%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    whiteSpace: 'nowrap',
+                    fontFamily: hand,
+                    fontSize: '0.9rem',
+                    color: 'rgba(90,70,40,0.75)',
+                    fontStyle: 'italic',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  {floatText}
+                </motion.span>
+              )}
+            </AnimatePresence>
             No
           </motion.button>
         </div>
